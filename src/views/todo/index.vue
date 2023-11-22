@@ -1,7 +1,7 @@
 <template>
   <div >
     <div class="dashboard-container">
-      <div  v-for="o in data" :key="o.id" >
+      <div  v-for="o in mergedResults" :key="o.id" >
         <el-card :body-style="{ padding: '0px' }" style="position: relative;height: 300px;">
 			<div slot="header" class="clearfix">
 				<span>{{typeMap[o.type]}}</span>
@@ -29,6 +29,7 @@
   
   <script>
 import { mapGetters } from "vuex";
+import { returnBook,continueBook,updateTicketStatus,updateBorrowingTicketIsNotice,selectBorrowingTicketByReturnDate,selectBorrowingTicketByIsNotice } from "@/api/todo";
 
 export default {
   name: "Dashboard",
@@ -40,12 +41,13 @@ export default {
 		title: '图书归还通知',
 		currentDate: new Date(),
 		typeMap:{
-			1:'图书归还通知',
-			2:'借阅审批通过',
-			3:'借书申请',
+			1:'图书借阅成功通知',
+			2:'借阅逾期通知',
+			3:'借书申请通知',
 			
 
 		},
+		mergedResults:[],
 		data:[
 			{
 				type:1,
@@ -65,10 +67,40 @@ export default {
 
 			},
 		],
+		queryParams: {
+			pageNo: 1,
+			pageSize: 100,
 
+		},
 	}
 
   },
+created(){
+	Promise.all([
+				selectBorrowingTicketByIsNotice(this.queryParams),
+				selectBorrowingTicketByReturnDate(this.queryParams)	
+			
+			]).then(([isNoticeResult, returnDateResult]) => {
+				const isNoticeData = isNoticeResult.data.records.map(record => ({
+					...record,
+					type: 1 ,
+					content:`您申请借阅的《${record.bookName}》已通过借阅审批。请在三个月内归还图书。如需续借，请在还书日期前点击续借。`
+				}));
+
+				const returnDateData = returnDateResult.data.records.map(record => ({
+					...record,
+					type: 2 ,
+					content:`您申请借阅的《${record.bookName}》已逾期，请尽快归还，谢谢合作。`,
+				}));
+				this.mergedResults = isNoticeData.concat(returnDateData);
+
+				console.log(mergedResults);
+			}).catch(error => {
+				console.error('Error fetching data:', error);
+				// 处理请求错误
+			});
+
+},
 methods:{
 		deleteItem(id){
 			

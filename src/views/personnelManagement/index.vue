@@ -32,36 +32,36 @@
 
 				<template slot-scope="scope">
 
-					{{ scope.$index }}
+					{{ scope.$index+1 }}
 				</template>
 			</el-table-column>
 			<el-table-column label="用户名">
 				<template slot-scope="scope">
-					{{ scope.row.title }}
+					{{ scope.row.userName}}
 				</template>
 			</el-table-column>
 			<el-table-column label="用户类型" width="110" align="center">
 				<template slot-scope="scope">
-					<span>{{ scope.row.author }}</span>
+					<span>{{ typeMap[scope.row.userType] }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="手机号" width="110" align="center">
 				<template slot-scope="scope">
-					{{ scope.row.pageviews }}
+					{{ scope.row.phoneNumber }}
 				</template>
 			</el-table-column>
 			<el-table-column class-name="status-col" label="邮箱地址" width="110" align="center">
 				<template slot-scope="scope">
-					<el-tag :type="scope.row.status | statusFilter">
+					
 
-						{{ scope.row.status }}</el-tag>
+						{{ scope.row.email }}
 				</template>
 			</el-table-column>
 			<el-table-column align="center" prop="created_at" label="注册日期" width="200">
 				<template slot-scope="scope">
 					<i class="el-icon-time" />
 
-					<span>{{ scope.row.display_time }}</span>
+					<span>{{ scope.row.createTime }}</span>
 				</template>
 			</el-table-column>
 
@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { getList } from "@/api/table";
+import { getList,getTypeMap } from "@/api/personnelManagement";
 
 export default {
 	filters: {
@@ -103,6 +103,7 @@ export default {
 	},
 	data() {
 		return {
+				typeMap:{},
 			    // 显示搜索条件
 				showSearch: true,
 			    // 总条数
@@ -147,13 +148,24 @@ export default {
 		};
 	},
 	created() {
+		this.initTypeMap();
 		this.fetchData();
 	},
 	methods: {
+		initTypeMap(){
+			getTypeMap().then((res)=>{
+				this.typeMap=res.data;
+			})
+		},
 		fetchData() {
 			this.listLoading = true;
-			getList().then((response) => {
-				this.list = response.data.items;
+			getList({
+				pageNo: this.queryParams.pageNo,
+				pageSize: this.queryParams.pageSize,
+				keyWord:''
+	
+			}).then((response) => {
+				this.list = response.data.records;
 				this.listLoading = false;
 			});
 		},

@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function login(data) {
   return request({
-    url: '/lsd-bookmanager-Web/user/login',
+    url: '/login',
     method: 'post',
     data
   })
@@ -10,15 +10,15 @@ export function login(data) {
 
 export function getInfo(token) {
   return request({
-    url: '/lsd-bookmanager-Web/user/info',
-    method: 'get',
-    params: { token }
+    url: '/getUserInfo',
+    method: 'get'
+    
   })
 }
 
 export function logout() {
   return request({
-    url: '/lsd-bookmanager-Web/user/logout',
-    method: 'post'
+    url: '/api/logout',
+    method: 'get'
   })
 }

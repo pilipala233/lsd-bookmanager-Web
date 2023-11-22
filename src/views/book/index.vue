@@ -49,12 +49,12 @@
 
 				<template slot-scope="scope">
 
-					{{ scope.$index }}
+					{{ scope.$index+1 }}
 				</template>
 			</el-table-column>
 			<el-table-column label="书名">
 				<template slot-scope="scope">
-					{{ scope.row.title }}
+					{{ scope.row.name }}
 				</template>
 			</el-table-column>
 			<el-table-column label="作者" width="110" align="center">
@@ -64,31 +64,25 @@
 			</el-table-column>
 			<el-table-column label="简介" width="110" align="center">
 				<template slot-scope="scope">
-					{{ scope.row.pageviews }}
+					{{ scope.row.detail }}
 				</template>
 			</el-table-column>
-			<el-table-column class-name="status-col" label="所属类别" width="110" align="center">
-				<template slot-scope="scope">
-					<el-tag :type="scope.row.status | statusFilter">
 
-						{{ scope.row.status }}</el-tag>
-				</template>
-			</el-table-column>
 			<el-table-column align="center" prop="created_at" label="出版时间" width="200">
 				<template slot-scope="scope">
 					<i class="el-icon-time" />
 
-					<span>{{ scope.row.display_time }}</span>
+					<span>{{ scope.row.publishDate }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="剩余数量" width="110" align="center">
 				<template slot-scope="scope">
-					<span>{{ scope.row.author }}</span>
+					<span>{{ scope.row.count }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="类型" width="110" align="center">
 				<template slot-scope="scope">
-					<span>{{ scope.row.author }}</span>
+					<span>{{ typeMap[scope.row.type] }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="操作" align="center" fixed="right" width="190">
@@ -96,13 +90,13 @@
 					<el-row style="display: flex;justify-content: center;">
 						<el-col >
 
-							<el-button size="mini" @click.stop="handleBorrowing(scope.$index, scope.row)" 
+							<el-button size="mini" @click.stop="" 
 								icon="el-icon-edit-outline">下载</el-button>
 
 						</el-col>
 						<el-col >
 
-							<el-button size="mini" @click.stop="handleBorrowing(scope.$index, scope.row)" type="success"
+							<el-button size="mini" v-if="scope.row.count" @click.stop="handleBorrowing(scope.row.id)" type="success"
 								icon="el-icon-edit-outline">借阅</el-button>
 
 						</el-col>
@@ -118,8 +112,8 @@
 </template>
 
 <script>
-import { getList } from "@/api/table";
-
+import { getList ,getTypeMap,addBorrowingTicket} from "@/api/table";
+import { mapGetters } from 'vuex'
 export default {
 	filters: {
 		statusFilter(status) {
@@ -131,6 +125,11 @@ export default {
 			return statusMap[status];
 		},
 	},
+	computed: {
+    ...mapGetters([
+		'userId'	
+    ])
+  },
 	data() {
 		return {
 			    // 显示搜索条件
@@ -165,28 +164,48 @@ export default {
 				  queryParams: {
 					pageNo: 1,
 					pageSize: 10,
-					projectName: null,
-					projectId: null,
-					engineerId:null
+		
 				},
 				// 表单参数
 				form: {
 					projectName: null,
 					projectId: null,
 				},
+				typeMap:{}
 		};
 	},
 	created() {
+		this.initTypeMap();
 		this.fetchData();
 	},
 	methods: {
+		initTypeMap(){
+			getTypeMap().then((res)=>{
+				this.typeMap=res.data;
+			})
+		},
 		fetchData() {
+
 			this.listLoading = true;
-			getList().then((response) => {
-				this.list = response.data.items;
+			getList({
+				pageNo: this.queryParams.pageNo,
+				pageSize: this.queryParams.pageSize,
+				keyWord:''
+	
+			}).then((response) => {
+				this.list = response.data.records;
 				this.listLoading = false;
 			});
 		},
+		handleBorrowing(bookId){
+			
+			addBorrowingTicket({bookId,userId:this.userId}).then((res)=>{
+				this.$message({
+					type: 'success',
+					message: '借阅成功!'
+				  });
+			})
+		}
 	},
 };
 </script>

@@ -37,7 +37,7 @@
 			</el-table-column>
 			<el-table-column label="书名">
 				<template slot-scope="scope">
-					{{ scope.row.title }}
+					{{ scope.row.name }}
 				</template>
 			</el-table-column>
 			<el-table-column label="作者" width="110" align="center">
@@ -47,28 +47,26 @@
 			</el-table-column>
 			<el-table-column label="简介" width="110" align="center">
 				<template slot-scope="scope">
-					{{ scope.row.pageviews }}
+					{{ scope.row.detail}}
 				</template>
 			</el-table-column>
 			<el-table-column class-name="status-col" label="所属类别" width="110" align="center">
 				<template slot-scope="scope">
-					<el-tag :type="scope.row.status | statusFilter">
-
-						{{ scope.row.status }}</el-tag>
+						{{ scope.row.type }}
 				</template>
 			</el-table-column>
 			<el-table-column align="center" prop="created_at" label="借书时间" width="200">
 				<template slot-scope="scope">
 					<i class="el-icon-time" />
 
-					<span>{{ scope.row.display_time }}</span>
+					<span>{{ scope.row.createTime }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column align="center" prop="created_at" label="还书时间" width="200">
 				<template slot-scope="scope">
 					<i class="el-icon-time" />
 
-					<span>{{ scope.row.display_time }}</span>
+					<span>{{ scope.row.planReturnDate }}</span>
 				</template>
 			</el-table-column>
 			
@@ -99,7 +97,7 @@
 </template>
 
 <script>
-import { getList } from "@/api/table";
+import { getList } from "@/api/bookBorrowing";
 
 export default {
 	filters: {
@@ -152,8 +150,8 @@ export default {
 				},
 				// 表单参数
 				form: {
-					projectName: null,
-					projectId: null,
+					pageNo: 1,
+					pageSize: 10,
 				},
 		};
 	},
@@ -163,8 +161,13 @@ export default {
 	methods: {
 		fetchData() {
 			this.listLoading = true;
-			getList().then((response) => {
-				this.list = response.data.items;
+			getList({
+				pageNo: this.queryParams.pageNo,
+				pageSize: this.queryParams.pageSize,
+				keyWord:''
+	
+			}).then((response) => {
+				this.list = response.data.records;
 				this.listLoading = false;
 			});
 		},

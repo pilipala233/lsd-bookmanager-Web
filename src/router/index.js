@@ -32,6 +32,10 @@ import Layout from '@/layout'
  */
 export const constantRoutes = [
   {
+    path: '/',
+    redirect: '/login',
+  },
+  {
     path: '/login',
     component: () => import('@/views/login/index'),
     hidden: true
@@ -52,9 +56,9 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/book',
     children: [{
-      path: 'dashboard',
+      path: 'book',
       name: '书库',
       component: () => import('@/views/book/index'),
       meta: { title: '书库', icon: 'dashboard' }
@@ -65,7 +69,7 @@ export const constantRoutes = [
     component: Layout,
    
     children: [{
-      path: 'dashboard1',
+      path: 'bookBorrowing',
       name: '借阅记录',
       component: () => import('@/views/bookBorrowing/index'),
       meta: { title: '借阅记录', icon: 'dashboard' }
@@ -76,7 +80,7 @@ export const constantRoutes = [
     component: Layout,
    
     children: [{
-      path: 'dashboard2',
+      path: 'personnelManagement',
       name: '人员管理',
       component: () => import('@/views/personnelManagement/index'),
       meta: { title: '人员管理', icon: 'dashboard' }
@@ -87,7 +91,7 @@ export const constantRoutes = [
     component: Layout,
    
     children: [{
-      path: 'dashboard3',
+      path: 'todo',
       name: '代办',
       component: () => import('@/views/todo/index'),
       meta: { title: '代办', icon: 'dashboard' }
@@ -98,7 +102,7 @@ export const constantRoutes = [
     component: Layout,
     hideShow:true,
     children: [{
-      path: 'dashboard4',
+      path: 'info',
       name: '个人信息',
       component: () => import('@/views/info/index'),
       meta: { title: '个人信息', icon: 'dashboard' }

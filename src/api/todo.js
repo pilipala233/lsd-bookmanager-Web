@@ -1,33 +1,33 @@
 import request from '@/utils/request'
 
-export function returnBook() {
+export function returnBook(params) {
   return request({
     url: '/returnBook',
-    method: 'get',
-    
+    method: 'post',
+    params
   })
 }
 
-export function continueBook() {
+export function continueBook(params) {
     return request({
       url: '/continueBook',
-      method: 'get',
-    
+      method: 'post',
+      params
     })
 }
 export function updateTicketStatus(params) {
     return request({
       url: '/updateTicketStatus',
-      method: 'get',
+      method: 'post',
       data:params
     
     })
 }
-export function updateBorrowingTicketIsNotice() {
+export function updateBorrowingTicketIsNotice(params) {
     return request({
       url: '/updateBorrowingTicketIsNotice',
       method: 'get',
-    
+      params
     })
 }
 export function selectBorrowingTicketByReturnDate(params) {
@@ -41,6 +41,14 @@ export function selectBorrowingTicketByReturnDate(params) {
 export function selectBorrowingTicketByIsNotice(params) {
     return request({
       url: '/selectBorrowingTicketByIsNotice',
+      method: 'post',
+      data:params
+    
+    })
+}
+export function selectApprovalTicketByPage(params) {
+    return request({
+      url: '/selectApprovalTicketByPage',
       method: 'post',
       data:params
     

@@ -75,13 +75,13 @@
 					<el-row style="display: flex;justify-content: center;">
 						<el-col >
 
-							<el-button size="mini" @click.stop="handleBorrowing(scope.$index, scope.row)" 
+							<el-button size="mini" @click.stop="returnBook(scope.row.id)" 
 								icon="el-icon-edit-outline">还书</el-button>
 
 						</el-col>
 						<el-col >
 
-							<el-button size="mini" @click.stop="handleBorrowing(scope.$index, scope.row)" type="success"
+							<el-button size="mini" @click.stop="continueBook(scope.row.id)" type="success"
 								icon="el-icon-edit-outline">续借</el-button>
 
 						</el-col>
@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import { getList } from "@/api/bookBorrowing";
+import { getList ,returnBook,continueBook} from "@/api/bookBorrowing";
 
 export default {
 	filters: {
@@ -171,6 +171,26 @@ export default {
 				this.listLoading = false;
 			});
 		},
+		returnBook(id){
+			returnBook({id}).then(res=>{
+				this.$message({
+					message: '操作成功',
+					type: 'success'
+				  });
+				 
+			})
+		},
+		continueBook(id){
+			continueBook({id}).then(res=>{
+				this.$message({
+					message: '操作成功',
+					type: 'success'
+				  });
+				 
+			})
+		},
+
+		
 	},
 };
 </script>

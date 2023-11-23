@@ -7,5 +7,19 @@ export function getList(params) {
     data:params
   })
 }
+export function returnBook(params) {
+  return request({
+    url: '/returnBook',
+    method: 'post',
+    params
+  })
+}
 
+export function continueBook(params) {
+    return request({
+      url: '/continueBook',
+      method: 'post',
+      params
+    })
+}
 

@@ -5,20 +5,27 @@
         <el-card :body-style="{ padding: '0px' }" style="position: relative;height: 300px;">
 			<div slot="header" class="clearfix">
 				<span>{{typeMap[o.type]}}</span>
-				<i class="el-icon-close" style="float:right;cursor: pointer;" @click="deleteItem(o.id)"></i>
+				<i class="el-icon-close" style="float:right;cursor: pointer;" @click="deleteItem(o.id,o.type)"></i>
 				<!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
 			</div>
-			<div style="padding: 10px;letter-spacing: 3px;">
+			<div  v-if="o.type!=3" style="padding: 10px;letter-spacing: 3px;">
 
 					{{ o.content }}
+			</div>
+			<div v-else style="padding: 10px;">
+				<p style="margin: 3px 0">书籍名称：{{o.name}}</p>
+				<p style="margin: 3px 0 ">图书编号：{{o.isbn}}</p>
+				<p style="margin: 3px 0 ">借书人：{{o.userName}}</p>
+				<p style="margin: 3px 0 ">申请日期：{{o.createTime}}</p>
+				<p style="margin: 3px 0 ">还书日期：{{o.planReturnDate}}</p>
 			</div>
 			<div style="padding: 14px;    position: absolute;bottom: 0;right: 0;">
 				<div class="clearfix">
 					
-					<el-button  v-if="o.type==2" class="button">续借</el-button>
-					<el-button  v-if="o.type==2" class="button">归还</el-button>
-					<el-button  v-if="o.type==3" class="button">同意</el-button>
-					<el-button  v-if="o.type==3" class="button">驳回</el-button>
+					<el-button  v-if="o.type==2" class="button" @click="continueBook(o.id)">续借</el-button>
+					<el-button  v-if="o.type==2" class="button" @click="returnBook(o.id)">归还</el-button>
+					<el-button  v-if="o.type==3" class="button" @click="updateTicket(o.id,1)">同意</el-button>
+					<el-button  v-if="o.type==3" class="button" @click="updateTicket(o.id,2)">驳回</el-button>
 				</div>
 			</div>
         </el-card>
@@ -29,7 +36,7 @@
   
   <script>
 import { mapGetters } from "vuex";
-import { returnBook,continueBook,updateTicketStatus,updateBorrowingTicketIsNotice,selectBorrowingTicketByReturnDate,selectBorrowingTicketByIsNotice } from "@/api/todo";
+import { returnBook,continueBook,updateTicketStatus,updateBorrowingTicketIsNotice,selectBorrowingTicketByReturnDate,selectBorrowingTicketByIsNotice,selectApprovalTicketByPage } from "@/api/todo";
 
 export default {
   name: "Dashboard",
@@ -48,25 +55,7 @@ export default {
 
 		},
 		mergedResults:[],
-		data:[
-			{
-				type:1,
-				content:'您申请借阅的《交互设计4》已通过借阅审批。请在三个月内归还图书。如需续借，请在还书日期前点击续借。',
-				id:1,
 
-			},{
-				type:2,
-				content:'您还有部分书籍未归还，请尽快归还，谢谢合作。',
-				id:2,
-
-			},
-			{
-				type:3,
-				content:'书籍名称：交互设计4图书编号：jhsj42022100601借书人：赵宝刚申请日期：2022/09/30还书日期：2022/12/30',
-				id:3,
-
-			},
-		],
 		queryParams: {
 			pageNo: 1,
 			pageSize: 100,
@@ -78,9 +67,9 @@ export default {
 created(){
 	Promise.all([
 				selectBorrowingTicketByIsNotice(this.queryParams),
-				selectBorrowingTicketByReturnDate(this.queryParams)	
-			
-			]).then(([isNoticeResult, returnDateResult]) => {
+				selectBorrowingTicketByReturnDate(this.queryParams)	,
+				selectApprovalTicketByPage(this.queryParams),
+			]).then(([isNoticeResult, returnDateResult,approvalResult]) => {
 				const isNoticeData = isNoticeResult.data.records.map(record => ({
 					...record,
 					type: 1 ,
@@ -92,9 +81,14 @@ created(){
 					type: 2 ,
 					content:`您申请借阅的《${record.bookName}》已逾期，请尽快归还，谢谢合作。`,
 				}));
-				this.mergedResults = isNoticeData.concat(returnDateData);
+				const approvalResultData = approvalResult.data.records.map(record => ({
+					...record,
+					type: 3,}));
 
-				console.log(mergedResults);
+
+				this.mergedResults = isNoticeData.concat(returnDateData,approvalResultData);
+
+				console.log(this.mergedResults);
 			}).catch(error => {
 				console.error('Error fetching data:', error);
 				// 处理请求错误
@@ -102,10 +96,44 @@ created(){
 
 },
 methods:{
-		deleteItem(id){
+		deleteItem(id,type){
+			debugger
+			if(type==1){
+				updateBorrowingTicketIsNotice({id}).then(res=>{
+		
+					  this.mergedResults = this.mergedResults.filter(obj=>obj.id!=id)
+				})
+			}
 			
-			this.data = this.data.filter(obj=>obj.id!=id)
-		}
+
+		},
+		returnBook(id){
+			returnBook({id}).then(res=>{
+				this.$message({
+					message: '操作成功',
+					type: 'success'
+				  });
+				  this.mergedResults = this.mergedResults.filter(obj=>obj.id!=id)
+			})
+		},
+		continueBook(id){
+			continueBook({id}).then(res=>{
+				this.$message({
+					message: '操作成功',
+					type: 'success'
+				  });
+				  this.mergedResults = this.mergedResults.filter(obj=>obj.id!=id)
+			})
+		},
+		updateTicket(id,status){
+			updateTicketStatus({id,status}).then(res=>{
+				this.$message({
+					message: '操作成功',
+					type: 'success'
+				  });
+				  this.mergedResults = this.mergedResults.filter(obj=>obj.id!=id)
+			})
+		},
 	}
 };
 </script>

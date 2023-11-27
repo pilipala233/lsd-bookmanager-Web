@@ -14,4 +14,25 @@ export function getTypeMap() {
       method: 'get',
       
     })
+}
+export function deleteUser(params) {
+    return request({
+      url: '/deleteUser',
+      method: 'get',
+      params
+    })
+}
+export function deleteUsers(params) {
+    return request({
+      url: '/deleteUsers',
+      method: 'post',
+      data:params
+    })
+}
+  export function addUser(params) {
+    return request({
+      url: '/addUser',
+      method: 'post',
+      data:params
+    })
   }

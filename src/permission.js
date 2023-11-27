@@ -29,6 +29,12 @@ router.beforeEach(async(to, from, next) => {
       // NProgress.done()
     } else {
       const hasGetUserInfo = store.getters.name
+      // const routes = store.getters.routes
+      // if(!routes||routes.length==0){
+      //   await store.dispatch('user/getMenu')
+      // }
+      //请求用户菜单
+      
       if (hasGetUserInfo) {
         next()
       } else {

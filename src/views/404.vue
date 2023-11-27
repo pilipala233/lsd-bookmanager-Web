@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import router from '@/router'
 
 export default {
   name: 'Page404',
@@ -28,6 +29,11 @@ export default {
     message() {
       return 'The webmaster said that you can not enter this page...'
     }
+  },
+  mounted() {
+    console.log(this.$router.options.routes)
+      
+      
   }
 }
 </script>

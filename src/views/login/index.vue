@@ -54,7 +54,10 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
-
+import { selectMenuByUserId} from '@/api/user'
+import Layout from '@/layout'
+import router from '@/router'
+import register from '@/views/register/index'
 export default {
   name: 'Login',
   data() {
@@ -86,6 +89,7 @@ export default {
       redirect: undefined
     }
   },
+
   watch: {
     $route: {
       handler: function(route) {
@@ -112,8 +116,23 @@ export default {
         if (valid) {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/book' })
-            this.loading = false
+          
+            selectMenuByUserId().then(response=>{
+             
+              console.log(response)
+              this.generateRoutesFromMenuData(response.data)
+
+              
+                  this.$router.push({ path: this.redirect || '/book' })
+                  this.loading = false                
+              
+
+            })
+
+
+
+ 
+            
           }).catch(() => {
             this.loading = false
           })
@@ -122,8 +141,60 @@ export default {
           return false
         }
       })
+    },
+    generateRoutesFromMenuData(menuData){
+      const routes = [];
+
+      // 根据接口返回的数据构建路由配置
+      menuData.forEach((menu) => {
+        const children = menuData.filter((childMenu) => childMenu.parentId === menu.menuId.toString());
+        if (menu.menuType === 'M') {
+          const route = {
+            path: menu.path,
+            component: Layout,
+            redirect: children[0].component,
+            meta: {
+              title: menu.menuName,
+              icon: menu.icon
+              // 可以根据接口返回的其他数据继续补充 meta 信息
+            },
+            children: []
+          };
+
+          // 查找当前菜单的子菜单并添加到 children 中
+          
+          children.forEach((child) => {
+            route.children.push({
+              path: child.path,
+              name: child.menuName,
+             // component: () => import(`@/views/${child.component}`),
+              component: (resolve) => require([`@/views/${child.component}`], resolve),
+              meta: {
+                title: child.menuName,
+                icon: child.icon
+                // 可以根据接口返回的其他数据继续补充 meta 信息
+              }
+            });
+          });
+          routes.push(route);
+
+        }
+      });
+      
+      ///routes.push(route);
+      this.$store.commit('user/SET_ROUTES', routes)
+      
+ 
+      router.addRoutes(routes)
+      
+
+
+        
+
     }
-  }
+      
+     
+    }
 }
 </script>
 

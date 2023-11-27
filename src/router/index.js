@@ -40,11 +40,11 @@ export const constantRoutes = [
     component: () => import('@/views/login/index'),
     hidden: true
   },
-  {
-    path: '/register',
-    component: () => import('@/views/register/index'),
-    hidden: true
-  },
+  // {
+  //   path: '/register',
+  //   component: () => import('@/views/register/index'),
+  //   hidden: true
+  // },
 
   {
     path: '/404',
@@ -53,64 +53,67 @@ export const constantRoutes = [
   },
 
 
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/book',
-    children: [{
-      path: 'book',
-      name: '书库',
-      component: () => import('@/views/book/index'),
-      meta: { title: '书库', icon: 'dashboard' }
-    }]
-  },
-  {
-    path: '/bookBorrowing',
-    component: Layout,
-   
-    children: [{
-      path: 'bookBorrowing',
-      name: '借阅记录',
-      component: () => import('@/views/bookBorrowing/index'),
-      meta: { title: '借阅记录', icon: 'dashboard' }
-    }]
-  },
-  {
-    path: '/personnelManagement',
-    component: Layout,
-   
-    children: [{
-      path: 'personnelManagement',
-      name: '人员管理',
-      component: () => import('@/views/personnelManagement/index'),
-      meta: { title: '人员管理', icon: 'dashboard' }
-    }]
-  },
-  {
-    path: '/todo',
-    component: Layout,
-   
-    children: [{
-      path: 'todo',
-      name: '代办',
-      component: () => import('@/views/todo/index'),
-      meta: { title: '代办', icon: 'dashboard' }
-    }]
-  },
-  {
-    path: '/info',
-    component: Layout,
-    hideShow:true,
-    children: [{
-      path: 'info',
-      name: '个人信息',
-      component: () => import('@/views/info/index'),
-      meta: { title: '个人信息', icon: 'dashboard' }
-    }]
+  // {
+  //   path: '/book',
+  //   component: Layout,
+  //   redirect: '/book/index',
+  //   children: [{
+  //     path: 'index',
+  //     name: '书库',
+  //     component: () => import('@/views/book/index'),
+  //     meta: { title: '书库', icon: 'dashboard' }
+  //   }]
+  // },
+  // {
+  //   path: '/bookBorrowing',
+  //   component: Layout,
+  //   redirect: '/bookBorrowing/index',
+  //   children: [{
+  //     path: 'index',
+  //     name: '借阅记录',
+  //     component: () => import('@/views/bookBorrowing/index'),
+  //     meta: { title: '借阅记录', icon: 'dashboard' }
+  //   }]
+  // },
+  // {
+  //   path: '/personnelManagement',
+  //   component: Layout,
+  //   redirect: '/personnelManagement/index',
+  //   children: [{
+  //     path: 'index',
+  //     name: '人员管理',
+  //     component: () => import('@/views/personnelManagement/index'),
+  //     meta: { title: '人员管理', icon: 'dashboard' }
+  //   }]
+  // },
+  // {
+  //   path: '/todo',
+  //   component: Layout,
+  //   redirect: '/todo/index',
+  //   children: [{
+  //     path: 'index',
+  //     name: '代办',
+  //     component: () => import('@/views/todo/index'),
+  //     meta: { title: '代办', icon: 'dashboard' }
+  //   }]
+  // },
+  // {
+  //   path: '/info',
+  //   component: Layout,
+  //   redirect: '/info/index',
+  //   children: [{
+  //     path: 'index',
+  //     name: '个人信息',
+  //     component: () => import('@/views/info/index'),
+  //     meta: { title: '个人信息', icon: 'dashboard' }
+  //   }]
       
      
     
-  },
+  // },
+
+
+
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

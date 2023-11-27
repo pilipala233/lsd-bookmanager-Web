@@ -1,5 +1,6 @@
 import store from '@/store'
 
+
 const { body } = document
 const WIDTH = 992 // refer to Bootstrap's responsive design
 
@@ -23,6 +24,7 @@ export default {
       store.dispatch('app/toggleDevice', 'mobile')
       store.dispatch('app/closeSideBar', { withoutAnimation: true })
     }
+
   },
   methods: {
     // use $_ for mixins properties
@@ -40,6 +42,8 @@ export default {
           store.dispatch('app/closeSideBar', { withoutAnimation: true })
         }
       }
+    },
+
     }
-  }
+  
 }

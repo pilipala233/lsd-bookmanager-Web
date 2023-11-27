@@ -1,13 +1,14 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, logout, getInfo ,selectMenuByUserId} from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { resetRouter } from '@/router'
-
+import router, { resetRouter } from '@/router'
+import Layout from '@/layout'
 const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
     avatar: '',
-    userId:''
+    userId:'',
+    routes: []
   }
 }
 
@@ -28,6 +29,10 @@ const mutations = {
   },
   SET_USERID: (state, userId) => {
     state.userId = userId
+  },
+  SET_ROUTES: (state, routes) => {
+    state.routes = routes
+    
   }
 }
 
@@ -68,7 +73,58 @@ const actions = {
       })
     })
   },
+  getMenu({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      selectMenuByUserId().then(response => {
+        const { data } = response
 
+        if (!data) {
+          return reject('Verification failed, please Login again.')
+        }
+        const routes = [];
+
+        // 根据接口返回的数据构建路由配置
+        data.forEach((menu) => {
+            if (menu.menuType === 'M') {
+            const route = {
+                path: menu.path,
+                component: () => import(`@/views/${menu.component}`),
+                meta: {
+                title: menu.menuName,
+                icon: menu.icon
+                // 可以根据接口返回的其他数据继续补充 meta 信息
+                },
+                children: []
+            };
+
+            // 查找当前菜单的子菜单并添加到 children 中
+            const children = data.filter((childMenu) => childMenu.parentId === menu.menuId.toString());
+            children.forEach((child) => {
+                route.children.push({
+                path: child.path,
+                name: child.menuName,
+                component: () => import(`@/views/${child.component}`),
+                meta: {
+                    title: child.menuName,
+                    icon: child.icon
+                    // 可以根据接口返回的其他数据继续补充 meta 信息
+                }
+                });
+            });
+
+            routes.push(route);
+            }
+        });
+        
+        commit('SET_ROUTES', routes);
+        router.addRoutes(routes)
+  
+        resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {

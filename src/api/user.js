@@ -22,3 +22,9 @@ export function logout() {
     method: 'get'
   })
 }
+export function selectMenuByUserId() {
+  return request({
+    url: '/selectMenuByUserId',
+    method: 'get'
+  })
+}

@@ -40,11 +40,11 @@ export const constantRoutes = [
     component: () => import('@/views/login/index'),
     hidden: true
   },
-  // {
-  //   path: '/register',
-  //   component: () => import('@/views/register/index'),
-  //   hidden: true
-  // },
+  {
+    path: '/register',
+    component: () => import('@/views/register/index'),
+    hidden: true
+  },
 
   {
     path: '/404',
@@ -115,9 +115,9 @@ export const constantRoutes = [
 
 
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+   { path: '*', redirect: '/404', hidden: true }
 ]
-
+// 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),

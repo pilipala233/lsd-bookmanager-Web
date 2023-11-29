@@ -7,7 +7,8 @@ const getDefaultState = () => {
     token: getToken(),
     name: '',
     avatar: '',
-    userId:'',
+ 
+    user:{},
     routes: []
   }
 }
@@ -27,12 +28,13 @@ const mutations = {
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
   },
-  SET_USERID: (state, userId) => {
-    state.userId = userId
-  },
+
   SET_ROUTES: (state, routes) => {
     state.routes = routes
     
+  },
+  SET_USER: (state, user) => {
+    state.user = user
   }
 }
 
@@ -63,10 +65,10 @@ const actions = {
         }
 
         const { name, avatar,id } = data
-
+        commit('SET_USER', data)
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
-        commit('SET_USERID', id)
+        
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -144,6 +146,14 @@ const actions = {
     return new Promise(resolve => {
       removeToken() // must remove  token  first
       commit('RESET_STATE')
+      resolve()
+    })
+  },
+
+  setUser({commit},user){
+   
+    return new Promise(resolve => {
+      commit('SET_USER',user)
       resolve()
     })
   }

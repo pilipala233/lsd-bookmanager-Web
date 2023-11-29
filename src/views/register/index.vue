@@ -6,19 +6,19 @@
           <h3 class="title">普通用户注册</h3>
         </div>
   
-        <el-form-item prop="username">
+        <el-form-item prop="userName">
           <span class="svg-container">
             <svg-icon icon-class="user" />
           </span>
           
           <el-input
-            ref="username"
-            v-model="loginForm.username"
-            placeholder="Username"
-            name="username"
+            ref="userName"
+            v-model="loginForm.userName"
+            placeholder="请输入用户名"
+            name="userName"
             type="text"
             tabindex="1"
-            auto-complete="on"
+            autocomplete="new-password"
           />
         </el-form-item>
         <el-form-item prop="email">
@@ -35,7 +35,7 @@
             name="email"
             type="text"
             tabindex="1"
-            auto-complete="on"
+            autocomplete="new-password"
           />
         </el-form-item>
         <el-form-item prop="phoneNumber">
@@ -50,7 +50,7 @@
             name="phoneNumber"
             type="text"
             tabindex="1"
-            auto-complete="on"
+            autocomplete="new-password"
           />
         </el-form-item>
         <el-form-item prop="password">
@@ -62,11 +62,11 @@
             ref="password"
             v-model="loginForm.password"
             :type="passwordType"
-            placeholder="请设置6至20位登录密码"
+            placeholder="请设置登录密码"
             name="password"
             tabindex="2"
-            auto-complete="on"
-            @keyup.enter.native="handleLogin"
+            autocomplete="new-password"
+            
           />
           <span class="show-pwd" @click="showPwd">
             <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
@@ -84,12 +84,10 @@
             placeholder="请再次输入登录密码"
             name="confirmPassword"
             tabindex="2"
-            auto-complete="on"
-            @keyup.enter.native="handleLogin"
+            autocomplete="new-password"
+            
           />
-          <span class="show-pwd" @click="showPwd">
-            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-          </span>
+
         </el-form-item>
   
         <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">注册</el-button>
@@ -102,31 +100,36 @@
   
   <script>
   import { validUsername } from '@/utils/validate'
-  
+  import {register} from '@/api/user'
   export default {
     name: 'Login',
     data() {
       const validateUsername = (rule, value, callback) => {
-        if (!validUsername(value)) {
-          callback(new Error('Please enter the correct user name'))
-        } else {
+       
+        if (validUsername(value)) {
           callback()
+        } else {
+          callback(new Error('用户名不能为空'))
+          
         }
       }
       const validatePassword = (rule, value, callback) => {
-        if (value.length < 6) {
-          callback(new Error('The password can not be less than 6 digits'))
+        if (value.length < 0) {
+          callback(new Error('密码不能为空'))
         } else {
           callback()
         }
       }
       return {
         loginForm: {
-          username: 'admin',
-          password: '111111'
+          userName: '',
+          password: '',
+          phoneNumber:'',
+          email:'',
+          confirmPassword:''
         },
         loginRules: {
-          username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+          userName: [{ required: true, trigger: 'blur', validator: validateUsername }],
           password: [{ required: true, trigger: 'blur', validator: validatePassword }]
         },
         loading: false,
@@ -156,9 +159,14 @@
       handleLogin() {
         this.$refs.loginForm.validate(valid => {
           if (valid) {
+            if (this.loginForm.password !== this.loginForm.confirmPassword) {
+              this.$message.error('两次输入密码不一致');
+              return;
+            }
+           
             this.loading = true
-            this.$store.dispatch('user/login', this.loginForm).then(() => {
-              this.$router.push({ path: this.redirect || '/' })
+            register(this.loginForm).then(() => {
+              this.$router.push({ path: '/' })
               this.loading = false
             }).catch(() => {
               this.loading = false

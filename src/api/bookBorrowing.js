@@ -14,7 +14,13 @@ export function returnBook(params) {
     params
   })
 }
-
+export function returnBooks(params) {
+  return request({
+    url: '/returnBooks',
+    method: 'post',
+    data:params
+  })
+}
 export function continueBook(params) {
     return request({
       url: '/continueBook',

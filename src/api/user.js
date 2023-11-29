@@ -7,7 +7,13 @@ export function login(data) {
     data
   })
 }
-
+export function register(data) {
+  return request({
+    url: '/register',
+    method: 'post',
+    data
+  })
+}
 export function getInfo(token) {
   return request({
     url: '/getUserInfo',
@@ -26,5 +32,12 @@ export function selectMenuByUserId() {
   return request({
     url: '/selectMenuByUserId',
     method: 'get'
+  })
+}
+export function updateUser(params) {
+  return request({
+    url: '/updateUser',
+    method: 'post',
+    data:params
   })
 }

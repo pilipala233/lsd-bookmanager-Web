@@ -21,3 +21,18 @@ export function addBorrowingTicket(params) {
     data:params
   })
 }
+
+export function addBatchBorrowingTickets(params) {
+  return request({
+    url: '/addBatchBorrowingTickets',
+    method: 'post',
+    data:params
+  })
+}
+export function addBook(params) {
+  return request({
+    url: '/addBook',
+    method: 'post',
+    data:params
+  })
+}

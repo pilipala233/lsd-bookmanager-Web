@@ -182,12 +182,13 @@ export default {
       });
       
       ///routes.push(route);
+      // routes.push({ path: '*', redirect: '/404', hidden: true });
       this.$store.commit('user/SET_ROUTES', routes)
-      
+      this.$router.options.routes = this.$router.options.routes.concat(routes);
  
       router.addRoutes(routes)
       
-
+      
 
         
 

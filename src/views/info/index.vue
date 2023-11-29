@@ -11,9 +11,9 @@
         <el-form-item label="邮箱地址">
           <el-input v-model="form.email" />
         </el-form-item>
-        <el-form-item label="登录密码">
+        <!-- <el-form-item label="登录密码">
           <el-input v-model="form.passWord" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
           <el-button type="primary" @click="onSubmit">更新个人信息</el-button>
           
@@ -23,24 +23,38 @@
   </template>
   
   <script>
+  import {updateUser} from '@/api/user'
   export default {
     data() {
       return {
         form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
+          userName: '',
+          phoneNumber: '',
+          email: '',
+          id: '',
         }
       }
     },
+    mounted() {
+      this.form.userName = this.$store.getters.user.userName
+      this.form.phoneNumber = this.$store.getters.user.phoneNumber
+      this.form.email = this.$store.getters.user.email
+      this.form.id = this.$store.getters.user.id
+    },
     methods: {
       onSubmit() {
-        this.$message('submit!')
+        updateUser(this.form).then(res=>{
+          if(res.code==200){
+            debugger
+            this.$store.dispatch('user/setUser', res.data)
+            this.$message({
+              message: '更新成功',
+              type: 'success'
+            })            
+          }
+
+        })
+        
       },
       onCancel() {
         this.$message({

@@ -1,7 +1,7 @@
 <template>
   <div >
-    <div class="dashboard-container">
-      <div  v-for="o in mergedResults" :key="o.id" >
+    <div class="dashboard-container" v-if="mergedResults.length">
+      	<div  v-for="o in mergedResults" :key="o.id" >
         <el-card :body-style="{ padding: '0px' }" style="position: relative;height: 300px;">
 			<div slot="header" class="clearfix">
 				<span>{{typeMap[o.type]}}</span>
@@ -29,8 +29,11 @@
 				</div>
 			</div>
         </el-card>
+		</div>
 	</div>
-</div>
+	<div v-else style="text-align: center;">
+		<h1>暂无通知</h1>
+	</div>
   </div>
 </template>
   

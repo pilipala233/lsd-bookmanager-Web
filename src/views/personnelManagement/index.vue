@@ -160,40 +160,12 @@ export default {
       // 总条数
       total: 0,
       list: null,
-      bookTypeList: [
-        {
-          label: "全部",
-          value: null,
-        },
-        {
-          label: "电子书",
-          value: "1",
-        },
-        {
-          label: "实体书",
-          value: "0",
-        },
-      ],
-      borrowTypeList: [
-        {
-          label: "全部",
-          value: null,
-        },
-        {
-          label: "可借阅",
-          value: "1",
-        },
-        {
-          label: "不可借阅",
-          value: "0",
-        },
-      ],
       listLoading: true,
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-		keyWord:''
+		    keyWord:''
 
       },
       // 表单参数
@@ -264,7 +236,7 @@ export default {
 	cancel() {
       this.open = false;
       this.reset();
-      this.$refs.selectPersonVue.cleanTableSelect();
+      //this.$refs.selectPersonVue.cleanTableSelect();
     },
 	/** 提交按钮 */
 	submitForm() {

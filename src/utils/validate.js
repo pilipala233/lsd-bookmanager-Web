@@ -16,5 +16,5 @@ export function isExternal(path) {
  */
 export function validUsername(str) {
   
-  return str.trim() >= 0
+  return str.trim().length >= 0
 }

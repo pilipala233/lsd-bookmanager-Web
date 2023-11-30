@@ -15,10 +15,10 @@
     <el-row :gutter="10" class="mb8" style="margin-bottom: 10px;">
 
       <el-col :span="1.5">
-        <el-button type="primary" plain icon="el-icon-download" size="mini" @click="addUser">添加用户</el-button>
+        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="addUser">添加用户</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="primary" plain icon="el-icon-download" size="mini" @click="batchDeleteUsers">批量注销</el-button>
+        <el-button type="primary" plain icon="el-icon-user" size="mini" @click="batchDeleteUsers">批量注销</el-button>
       </el-col>
 
       <right-toolbar :showSearch.sync="showSearch"></right-toolbar>
@@ -71,7 +71,7 @@
 
             <el-col>
 
-              <el-button size="mini" @click.stop="deleteUser(scope.row.id)" type="success" icon="el-icon-edit-outline">注销</el-button>
+              <el-button size="mini" @click.stop="deleteUser(scope.row.id)" type="success" >注销</el-button>
 
             </el-col>
 

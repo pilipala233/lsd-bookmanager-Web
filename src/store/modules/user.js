@@ -84,41 +84,49 @@ const actions = {
           return reject('Verification failed, please Login again.')
         }
         const routes = [];
-
+        let menuData = data;
         // 根据接口返回的数据构建路由配置
-        data.forEach((menu) => {
-            if (menu.menuType === 'M') {
+        menuData.forEach((menu) => {
+          const children = menuData.filter((childMenu) => childMenu.parentId === menu.menuId.toString());
+          if (menu.menuType === 'M') {
             const route = {
-                path: menu.path,
-                component: () => import(`@/views/${menu.component}`),
-                meta: {
+              path: menu.path,
+              component: Layout,
+              redirect: children[0].component,
+              meta: {
                 title: menu.menuName,
                 icon: menu.icon
                 // 可以根据接口返回的其他数据继续补充 meta 信息
-                },
-                children: []
+              },
+              children: []
             };
-
+  
             // 查找当前菜单的子菜单并添加到 children 中
-            const children = data.filter((childMenu) => childMenu.parentId === menu.menuId.toString());
+            
             children.forEach((child) => {
-                route.children.push({
+              route.children.push({
                 path: child.path,
                 name: child.menuName,
-                component: () => import(`@/views/${child.component}`),
+               // component: () => import(`@/views/${child.component}`),
+                component: (resolve) => require([`@/views/${child.component}`], resolve),
                 meta: {
-                    title: child.menuName,
-                    icon: child.icon
-                    // 可以根据接口返回的其他数据继续补充 meta 信息
+                  title: child.menuName,
+                  icon: child.icon
+                  // 可以根据接口返回的其他数据继续补充 meta 信息
                 }
-                });
+              });
             });
-
             routes.push(route);
-            }
+  
+          }
         });
         
-        commit('SET_ROUTES', routes);
+        ///routes.push(route);
+        
+        
+        commit('SET_ROUTES', routes)
+        router.options.routes = router.options.routes.concat(routes);
+   
         router.addRoutes(routes)
   
         resolve(data)

@@ -15,7 +15,7 @@
     <el-row :gutter="10" class="mb8" style="margin-bottom: 10px;">
 
       <el-col :span="1.5">
-        <el-button type="primary" plain icon="el-icon-download" size="mini" @click="batchReturnBooks">批量归还</el-button>
+        <el-button type="primary" plain icon="el-icon-notebook-2" size="mini" @click="batchReturnBooks">批量归还</el-button>
       </el-col>
 
       <right-toolbar :showSearch.sync="showSearch"></right-toolbar>
@@ -73,12 +73,12 @@
           <el-row style="display: flex;justify-content: center;">
             <el-col>
 
-              <el-button size="mini" @click.stop="returnBook(scope.row.id)" icon="el-icon-edit-outline">还书</el-button>
+              <el-button size="mini" @click.stop="returnBook(scope.row.id)" >还书</el-button>
 
             </el-col>
             <el-col>
 
-              <el-button size="mini" @click.stop="continueBook(scope.row.id)" type="success" icon="el-icon-edit-outline">续借</el-button>
+              <el-button size="mini" @click.stop="continueBook(scope.row.id)" type="success" >续借</el-button>
 
             </el-col>
 

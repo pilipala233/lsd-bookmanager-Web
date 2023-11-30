@@ -34,7 +34,7 @@
       </el-col>
 
       <el-col :span="1.5">
-        <el-button type="primary" plain icon="el-icon-download" size="mini" @click="addBatchBorrowingTickets">批量借阅</el-button>
+        <el-button type="primary" plain icon="el-icon-notebook-2" size="mini" @click="addBatchBorrowingTickets">批量借阅</el-button>
       </el-col>
 
       <right-toolbar :showSearch.sync="showSearch"></right-toolbar>
@@ -95,12 +95,12 @@
           <el-row style="display: flex;justify-content: center;">
             <el-col>
 
-              <el-button size="mini" v-if="scope.row.type>0" @click.stop="" icon="el-icon-edit-outline" @click="downloadFile(scope.row.fileName)">下载</el-button>
+              <el-button size="mini" v-if="scope.row.type>0" @click.stop=""  @click="downloadFile(scope.row.fileName)">下载</el-button>
 
             </el-col>
             <el-col>
 
-              <el-button size="mini" v-if="scope.row.count&&scope.row.type!=1" @click.stop="handleBorrowing(scope.row.id)" type="success" icon="el-icon-edit-outline">借阅</el-button>
+              <el-button size="mini" v-if="scope.row.count&&scope.row.type!=1" @click.stop="handleBorrowing(scope.row.id)" type="success" >借阅</el-button>
 
             </el-col>
 

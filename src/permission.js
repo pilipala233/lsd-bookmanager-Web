@@ -6,11 +6,29 @@ import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 
+
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/login','/register'] // no redirect whitelist
 
 router.beforeEach(async(to, from, next) => {
+
+
+ if(!store.getters.routes.length && to.path !== '/login'){
+
+ store.dispatch('user/getMenu')
+  
+
+
+  next()
+ 
+ 
+ }
+
+
+
+ 
+ //store.getters.routes
   // start progress bar
   NProgress.start()
 
@@ -28,12 +46,15 @@ router.beforeEach(async(to, from, next) => {
       // next({ path: '/' })
       // NProgress.done()
     } else {
+
       const hasGetUserInfo = store.getters.name
       // const routes = store.getters.routes
       // if(!routes||routes.length==0){
       //   await store.dispatch('user/getMenu')
       // }
       //请求用户菜单
+
+    
       
       if (hasGetUserInfo) {
         next()

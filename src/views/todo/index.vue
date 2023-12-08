@@ -16,8 +16,8 @@
 				<p style="margin: 3px 0">书籍名称：{{o.name}}</p>
 				<p style="margin: 3px 0 ">图书编号：{{o.isbn}}</p>
 				<p style="margin: 3px 0 ">借书人：{{o.userName}}</p>
-				<p style="margin: 3px 0 ">申请日期：{{o.createTime}}</p>
-				<p style="margin: 3px 0 ">还书日期：{{o.planReturnDate}}</p>
+				<p style="margin: 3px 0 ">申请日期：{{new Date(o.createTime).toISOString().split('T')[0]}}</p>
+				<p style="margin: 3px 0 ">还书日期：{{new Date(o.planReturnDate).toISOString().split('T')[0]}}</p>
 			</div>
 			<div style="padding: 14px;    position: absolute;bottom: 0;right: 0;">
 				<div class="clearfix">

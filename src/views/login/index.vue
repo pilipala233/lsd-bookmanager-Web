@@ -40,7 +40,7 @@
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
-      <router-link to="/register" class="register" style="color: #fff;float: right;padding-bottom: 10px;padding-right: 10px;">注册</router-link>
+      <router-link to="/register" class="register" style="color: #fff;float: right;padding-bottom: 10px;padding-right: 10px;" @click.stop="">注册</router-link>
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
 
       <!-- <div class="tips">
@@ -109,8 +109,9 @@ export default {
         this.$refs.password.focus()
       })
     },
-    handleLogin() {
-   
+    handleLogin(event) {
+      
+      event.stopPropagation();
       this.$refs.loginForm.validate(valid => {
        
         if (valid) {

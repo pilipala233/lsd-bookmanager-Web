@@ -33,7 +33,7 @@
           {{ scope.$index +1}}
         </template>
       </el-table-column>
-      <el-table-column label="书名">
+      <el-table-column label="书名" width="110">
         <template slot-scope="scope">
           {{ scope.row.name }}
         </template>
@@ -43,7 +43,7 @@
           <span>{{ scope.row.author }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="简介" width="110" align="center">
+      <el-table-column label="简介"  align="center">
         <template slot-scope="scope">
           {{ scope.row.detail}}
         </template>
@@ -57,14 +57,14 @@
         <template slot-scope="scope">
           <i class="el-icon-time" />
 
-          <span>{{ scope.row.createTime }}</span>
+          <span>{{ new Date(scope.row.createTime).toISOString().split('T')[0]}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="还书时间" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time" />
 
-          <span>{{ scope.row.planReturnDate }}</span>
+          <span>{{  new Date(scope.row.planReturnDate).toISOString().split('T')[0]}}</span>
         </template>
       </el-table-column>
 

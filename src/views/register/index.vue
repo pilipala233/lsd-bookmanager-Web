@@ -129,8 +129,12 @@
           confirmPassword:''
         },
         loginRules: {
-          userName: [{ required: true, trigger: 'blur', validator: validateUsername }],
-          password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+            userName: [{ required: true, trigger: 'blur', validator: validateUsername }],
+            password: [{ required: true, trigger: 'blur', validator: validatePassword }],
+            // 其他校验规则
+            email: [{ required: true, message: '请输入邮箱地址', trigger: 'blur' }],
+            phoneNumber: [{ required: true, message: '请输入手机号码', trigger: 'blur' }],
+            confirmPassword: [{ required: true, message: '请再次输入登录密码', trigger: 'blur' }]
         },
         loading: false,
         passwordType: 'password',
@@ -158,6 +162,7 @@
       },
       handleLogin() {
         this.$refs.loginForm.validate(valid => {
+          debugger
           if (valid) {
             if (this.loginForm.password !== this.loginForm.confirmPassword) {
               this.$message.error('两次输入密码不一致');

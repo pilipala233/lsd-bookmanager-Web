@@ -14,7 +14,7 @@ const whiteList = ['/login','/register'] // no redirect whitelist
 router.beforeEach(async(to, from, next) => {
 
 
- if(!store.getters.routes.length && to.path !== '/login'){
+ if(!store.getters.routes.length && to.path !== '/login'&& to.path !== '/register'){
 
  store.dispatch('user/getMenu')
   

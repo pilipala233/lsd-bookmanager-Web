@@ -52,7 +52,7 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column label="书名">
+      <el-table-column label="书名" width="110">
         <template slot-scope="scope">
           {{ scope.row.name }}
         </template>
@@ -62,17 +62,17 @@
           <span>{{ scope.row.author }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="简介" width="110" align="center">
+      <el-table-column label="简介"  align="center">
         <template slot-scope="scope">
           {{ scope.row.detail }}
         </template>
       </el-table-column>
 
-      <el-table-column align="center" prop="created_at" label="出版时间" width="200">
-        <template slot-scope="scope">
+      <el-table-column align="center" prop="created_at" label="出版时间" width="150" >
+        <template slot-scope="scope" >
           <i class="el-icon-time" />
 
-          <span>{{ scope.row.publishDate }}</span>
+          <span>{{ new Date(scope.row.publishDate).toISOString().split('T')[0] }}</span>
         </template>
       </el-table-column>
       <el-table-column label="剩余数量（实体书籍）" width="110" align="center">
@@ -312,6 +312,7 @@ export default {
     },
   },
   methods: {
+
     addBook() {
       this.reset();
       this.open = true;
@@ -332,15 +333,23 @@ export default {
         }
       }
       const ids = selections.map((item) => {
-        return { bookId: item.id, userId: this.user.id };
+        return { bookId: item.id, userId: this.$store.getters.user.id };
       });
 
       addBatchBorrowingTickets(ids)
         .then((res) => {
+          if(this.$store.getters.user.userType!=3){
           this.$message({
             type: "success",
-            message: "批量借阅成功!",
+            message: "借阅成功!",
           });
+
+        }else{
+          this.$message({
+            type: "success",
+            message: "已提交借阅流程!",
+          });          
+        }
           this.fetchData();
         })
         .catch((error) => {
@@ -349,7 +358,7 @@ export default {
         });
     },
     handleBatchDownload() {
-      debugger;
+     
       const selections = this.$refs.table.selection;
       if (!selections || selections.length === 0) {
         this.$message.error("请选择要下载的文件");
@@ -399,11 +408,21 @@ export default {
       });
     },
     handleBorrowing(bookId) {
-      addBorrowingTicket({ bookId, userId: this.user.id }).then((res) => {
-        this.$message({
-          type: "success",
-          message: "借阅成功!",
-        });
+      
+      addBorrowingTicket({ bookId, userId: this.$store.getters.user.id }).then((res) => {
+        if(this.$store.getters.user.userType!=3){
+          this.$message({
+            type: "success",
+            message: "借阅成功!",
+          });
+
+        }else{
+          this.$message({
+            type: "success",
+            message: "已提交借阅流程!",
+          });          
+        }
+
         this.fetchData();
       });
     },

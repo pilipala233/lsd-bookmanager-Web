@@ -36,22 +36,22 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column label="用户名">
+      <el-table-column label="用户名" align="center" >
         <template slot-scope="scope">
           {{ scope.row.userName}}
         </template>
       </el-table-column>
-      <el-table-column label="用户类型" width="110" align="center">
+      <el-table-column label="用户类型"  align="center">
         <template slot-scope="scope">
           <span>{{ typeMap[scope.row.userType] }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="手机号" width="110" align="center">
+      <el-table-column label="手机号" align="center">
         <template slot-scope="scope">
           {{ scope.row.phoneNumber }}
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="邮箱地址" width="110" align="center">
+      <el-table-column class-name="status-col" label="邮箱地址" align="center">
         <template slot-scope="scope">
 
           {{ scope.row.email }}
@@ -61,7 +61,7 @@
         <template slot-scope="scope">
           <i class="el-icon-time" />
 
-          <span>{{ scope.row.createTime }}</span>
+          <span>{{ new Date(scope.row.createTime).toISOString().split('T')[0] }}</span>
         </template>
       </el-table-column>
 
